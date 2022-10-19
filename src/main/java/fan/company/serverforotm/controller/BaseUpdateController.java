@@ -36,12 +36,12 @@ public class BaseUpdateController {
      * @return natija qaytadi
      */
 
-
-    @RoleniTekshirish(role = "USER")
-    @PutMapping("/updatedBoolean")
-    public HttpEntity<?> updatedBoolean(@RequestParam Long divisionId, @RequestParam boolean update) {
-        ApiResult apiResult = service.editUpdated(divisionId, update);
-        return ResponseEntity.status(apiResult.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResult);
-    }
+//
+//    @RoleniTekshirish(role = "USER")
+//    @PutMapping("/updatedBoolean")
+//    public HttpEntity<?> updatedBoolean(@RequestParam Long divisionId, @RequestParam boolean update) {
+//        ApiResult apiResult = service.editUpdated(divisionId, update);
+//        return ResponseEntity.status(apiResult.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResult);
+//    }
 
 }

@@ -12,11 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class DivisionService {
-    
+
     @Autowired
     DivisionRepository repository;
     @Autowired
@@ -25,7 +26,7 @@ public class DivisionService {
     public ApiResult add(DivisionDto dto) {
 
         Optional<Division> optionalDivision = repository.findByName(dto.getName());
-        if(optionalDivision.isPresent())
+        if (optionalDivision.isPresent())
             return new ApiResult("Bunday Division mavjud!", false);
 
 
@@ -40,7 +41,7 @@ public class DivisionService {
     public ApiResult edit(Long id, DivisionDto dto) {
 
         Optional<Division> optionalDivision = repository.findById(id);
-        if(optionalDivision.isEmpty())
+        if (optionalDivision.isEmpty())
             return new ApiResult("Bunday Division mavjud emas!", false);
 
         Division division = new Division(dto.getName(), dto.isActive());
@@ -51,10 +52,16 @@ public class DivisionService {
         return new ApiResult("Muvoffaqiyatli tahrirlandi!", true);
     }
 
-    public Page<Division> getAll(Integer page) {
+    // Sahifalab olish
+    public Page<Division> getAllWithPage(Integer page) {
         Pageable pageable = PageRequest.of(page, 10);
         return repository.findAll(pageable);
     }
+
+    public List<Division> getAll() {
+        return repository.findAll();
+    }
+
 
     public Division getOne(Long id) {
         return repository.findById(id).orElse(null);

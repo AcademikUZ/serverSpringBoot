@@ -2,22 +2,18 @@ package fan.company.serverforotm.controller;
 
 import fan.company.serverforotm.annotation.RoleniTekshirish;
 import fan.company.serverforotm.entity.Division;
-import fan.company.serverforotm.entity.Users;
 import fan.company.serverforotm.payload.ApiResult;
 import fan.company.serverforotm.payload.DivisionDto;
-import fan.company.serverforotm.payload.RegisterDto;
 import fan.company.serverforotm.service.DivisionService;
-import fan.company.serverforotm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/division")
@@ -57,15 +53,29 @@ public class DivisionController {
     }
 
     /**
-     * barcha boshqarmalar ro'yxatini olish uchun ishlatiladi
+     * barcha boshqarmalar ro'yxatini sahifalab olish uchun ishlatiladi
      * @param page sahifalab berish uchun ishlatiladi (page) faqat integer keladi //misol  GET http://localhost:8080/api/division?page=0
      * @return  ApiResult orqali natija qaytadi true or false
      */
 
+//    Sahifalab olish uchun
+    @RoleniTekshirish(role = "ADMIN, USER")
+    @GetMapping("/divisionwithpage")
+    public HttpEntity<?> getAllWithPage(@RequestParam Integer page) {
+        Page<Division> all = service.getAllWithPage(page);
+        return ResponseEntity.status(!all.isEmpty()? HttpStatus.OK:HttpStatus.CONFLICT).body(all);
+    }
+
+    /**
+     * barcha boshqarmalar ro'yxatini olish uchun ishlatiladi
+     * @return  ApiResult orqali natija qaytadi true or false
+     */
+
+//   Umumiy olish uchun
     @RoleniTekshirish(role = "ADMIN, USER")
     @GetMapping
-    public HttpEntity<?> getAll(@RequestParam Integer page) {
-        Page<Division> all = service.getAll(page);
+    public HttpEntity<?> getAll() {
+        List<Division> all = service.getAll();
         return ResponseEntity.status(!all.isEmpty()? HttpStatus.OK:HttpStatus.CONFLICT).body(all);
     }
 

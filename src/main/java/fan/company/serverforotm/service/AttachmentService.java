@@ -115,10 +115,6 @@ public class AttachmentService {
             log.error(e.getMessage());
             throw new ResourceNotFoundException("user", "id", users.getDivision().getId());
         }
-
-
-
-
     }
 
     public List<Attachment> getAllByFromDivision(Users users) {

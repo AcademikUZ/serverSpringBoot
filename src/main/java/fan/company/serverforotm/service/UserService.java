@@ -6,7 +6,6 @@ import fan.company.serverforotm.entity.Users;
 import fan.company.serverforotm.exceptions.ResourceNotFoundException;
 import fan.company.serverforotm.payload.ApiResult;
 import fan.company.serverforotm.payload.RegisterDto;
-import fan.company.serverforotm.repository.BaseUpdatedRepository;
 import fan.company.serverforotm.repository.DivisionRepository;
 import fan.company.serverforotm.repository.RoleRepository;
 import fan.company.serverforotm.repository.UserRepository;
@@ -43,6 +42,10 @@ public class UserService {
         if (repository.findByUsername(dto.getUsername()).isPresent())
             return new ApiResult("Bunday username mavjud!", false);
 
+        Optional<Role> optionalRole = roleRepository.findById(dto.getRoleId());
+        if (optionalRole.isEmpty())
+            return new ApiResult("Bunday Role mavjud emas!", false);
+
         if (!passwordValidator.isValid(dto.getPassword())) return new ApiResult("Password mustahkam emas!", false);
 
         Users user = new Users(
@@ -67,8 +70,8 @@ public class UserService {
 
         Optional<Users> optionalUser = repository.findById(id);
 
-        if (optionalUser.isPresent())
-            return new ApiResult("Bunday username mavjud!", false);
+        if (optionalUser.isEmpty())
+            return new ApiResult("Bunday username mavjud emas!", false);
 
         Optional<Role> optionalRole = roleRepository.findById(dto.getRoleId());
         if (optionalRole.isEmpty())
