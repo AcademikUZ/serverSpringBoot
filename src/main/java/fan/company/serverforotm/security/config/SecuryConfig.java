@@ -4,6 +4,7 @@ import fan.company.serverforotm.security.PasswordValidator;
 import fan.company.serverforotm.security.filter.JwtFilter;
 import fan.company.serverforotm.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,11 +17,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecuryConfig extends WebSecurityConfigurerAdapter {
+public class SecuryConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     @Autowired
     AuthService authService;
@@ -58,6 +60,7 @@ public class SecuryConfig extends WebSecurityConfigurerAdapter {
 //
 //        return http.build();
 //    }
+
 
 
     @Override

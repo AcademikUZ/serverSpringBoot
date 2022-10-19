@@ -5,6 +5,8 @@ import fan.company.serverforotm.entity.Division;
 import fan.company.serverforotm.payload.ApiResult;
 import fan.company.serverforotm.payload.DivisionDto;
 import fan.company.serverforotm.service.DivisionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
@@ -12,11 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/division")
+//Swagger uchun
+@Tag(name = "Division", description = "Boshqarma qo'shish uchun controller")
 public class DivisionController {
 
     @Autowired
@@ -30,8 +35,11 @@ public class DivisionController {
      */
 
 
+
     @RoleniTekshirish(role = "ADMIN")
     @PostMapping
+    //Swagger uchun
+    @Operation(description = "Boshqarma qo'shish")
     public HttpEntity<?> add(@Valid @RequestBody DivisionDto dto){
         ApiResult apiResult = service.add(dto);
         return ResponseEntity.status(apiResult.isSuccess()? HttpStatus.CREATED:HttpStatus.CONFLICT).body(apiResult);
@@ -47,6 +55,8 @@ public class DivisionController {
 
     @RoleniTekshirish(role = "ADMIN")
     @PutMapping("/{id}")
+    //Swagger uchun
+    @Operation(description = "Boshqarmani o'zgartirish")
     public HttpEntity<?> editRole(@PathVariable Long id, @Valid @RequestBody DivisionDto dto) {
         ApiResult apiResult = service.edit(id, dto);
         return ResponseEntity.status(apiResult.isSuccess() ? HttpStatus.CREATED : HttpStatus.CONFLICT).body(apiResult);
@@ -61,6 +71,8 @@ public class DivisionController {
 //    Sahifalab olish uchun
     @RoleniTekshirish(role = "ADMIN, USER")
     @GetMapping("/divisionwithpage")
+    //Swagger uchun
+    @Operation(description = "Boshqarmalarni sahifalab olish")
     public HttpEntity<?> getAllWithPage(@RequestParam Integer page) {
         Page<Division> all = service.getAllWithPage(page);
         return ResponseEntity.status(!all.isEmpty()? HttpStatus.OK:HttpStatus.CONFLICT).body(all);
@@ -74,6 +86,8 @@ public class DivisionController {
 //   Umumiy olish uchun
     @RoleniTekshirish(role = "ADMIN, USER")
     @GetMapping
+    //Swagger uchun
+    @Operation(description = "Barcha Boshqarmalarni olish")
     public HttpEntity<?> getAll() {
         List<Division> all = service.getAll();
         return ResponseEntity.status(!all.isEmpty()? HttpStatus.OK:HttpStatus.CONFLICT).body(all);
@@ -87,6 +101,8 @@ public class DivisionController {
 
     @RoleniTekshirish(role = "ADMIN, USER")
     @GetMapping("/{id}")
+    //Swagger uchun
+    @Operation(description = "Bitta Boshqarmalarni olish")
     public HttpEntity<?> getOne(@PathVariable Long id) {
         Division one = service.getOne(id);
         return ResponseEntity.status(one != null? HttpStatus.OK:HttpStatus.CONFLICT).body(one);
@@ -102,6 +118,8 @@ public class DivisionController {
 
     @RoleniTekshirish(role = "ADMIN")
     @DeleteMapping("/{id}")
+    //Swagger uchun
+    @Operation(description = "Boshqarmalarni o'chirish (delete qilish uchun unga bog'liq barcha narsani o'chirish kerak)")
     public HttpEntity<?> delete(@PathVariable Long id) {
         ApiResult apiResult = service.delete(id);
         return ResponseEntity.status(apiResult.isSuccess()? HttpStatus.NO_CONTENT:HttpStatus.CONFLICT).body(apiResult);

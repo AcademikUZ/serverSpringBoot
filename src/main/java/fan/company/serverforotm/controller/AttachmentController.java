@@ -7,6 +7,8 @@ import fan.company.serverforotm.entity.Users;
 import fan.company.serverforotm.payload.ApiResult;
 import fan.company.serverforotm.payload.AttachmentDto;
 import fan.company.serverforotm.service.AttachmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -20,11 +22,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/attachment")
+//Swagger uchun
+@Tag(name = "Attachment", description = "Fayllarni yuklash uchun controller")
 public class AttachmentController {
 
     @Autowired
     AttachmentService attachmentService;
 
+    /**
+     * http://localhost:8080/swagger-ui/index.html#/
+     * swaggerni olish uchun manzil
+     */
     /**
      * @RoleniTekshirish foydalanuvchi roli tekshiriladi
      * @CurrentUser Sistemaga kirgan userni olish uchun kerak
@@ -38,6 +46,8 @@ public class AttachmentController {
 
     @RoleniTekshirish(role = "USER")
     @PostMapping("/uploadFileToFileSystem")
+    //Swagger uchun
+    @Operation(description = " Faylni sistemaga yuklash uchun ishlatiladi (bir nechta fayl yuborsa ham bo'ladi)")
     public HttpEntity<?> uploadFileToFileSystem(@CurrentUser Users users, @RequestParam Long toDivision, MultipartHttpServletRequest file) throws IOException {
         AttachmentDto dto = new AttachmentDto(users.getDivision().getId(), toDivision);
         ApiResult apiResult = attachmentService.uploadFileToFileSystem(dto, file);
@@ -57,6 +67,8 @@ public class AttachmentController {
 
     @RoleniTekshirish(role = "USER")
     @GetMapping("/downloadFileFromFileSystem/{id}")
+    //Swagger uchun
+    @Operation(description = "Faylni skachat qilish uchun ishlatiladi")
     public HttpEntity<?> downloadFileFromFileSystem(@CurrentUser Users users, @PathVariable Long id, HttpServletResponse response) {
         ApiResult apiResult = attachmentService.downloadFromFileSystem(users, id, response);
         return ResponseEntity.status(apiResult.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResult);
@@ -72,6 +84,8 @@ public class AttachmentController {
 
     @RoleniTekshirish(role = "USER")
     @GetMapping("/getAllByToDivision")
+    //Swagger uchun
+    @Operation(description = "Boshqarmaga kelgan fayllar ro'yxatini olish uchun ishlatiladi)")
     public List<Attachment> getAllByToDivision(@CurrentUser Users users) {
         return attachmentService.getAllByToDivision(users);
     }
@@ -79,13 +93,15 @@ public class AttachmentController {
     /**
      * @RoleniTekshirish foydalanuvchi roli tekshiriladi
      * @CurrentUser Sistemaga kirgan userni olish uchun kerak
-     * Boshqarmaga kelgan fayllar ro'yxatini olish uchun ishlatiladi
+     * Boshqarmadan ketgan fayllar ro'yxatini olish uchun ishlatiladi
      * @param users Boshqarmaga kelgan fayllar ro'yxatini olish uchun ishlatiladi
      * @return List<Attachment> qaytaradi
      */
 
     @RoleniTekshirish(role = "USER")
     @GetMapping("/getAllByFromDivision")
+    //Swagger uchun
+    @Operation(description = "Boshqarmadan ketgan fayllar ro'yxatini olish uchun ishlatiladi)")
     public List<Attachment> getAllByFromDivision(@CurrentUser Users users) {
         return attachmentService.getAllByFromDivision(users);
     }
@@ -100,6 +116,8 @@ public class AttachmentController {
 
     @RoleniTekshirish(role = "USER")
     @GetMapping("/getOneTo/{id}")
+    //Swagger uchun
+    @Operation(description = "Bitta kelgan faylni olish uchun ishlatiladi")
     public Attachment getOneTo(@CurrentUser Users users, @PathVariable Long id) {
         return attachmentService.getOneTo(users, id);
     }
@@ -113,6 +131,8 @@ public class AttachmentController {
 
     @RoleniTekshirish(role = "USER")
     @GetMapping("/getOneFrom/{id}")
+    //Swagger uchun
+    @Operation(description = "Bitta ketgan faylni olish uchun ishlatiladi")
     public Attachment getOneFrom(@CurrentUser Users users, @PathVariable Long id) {
         return attachmentService.getOneFrom(users, id);
     }
@@ -125,6 +145,8 @@ public class AttachmentController {
 
     @RoleniTekshirish(role = "USER")
     @GetMapping("/setView/{id}")
+    //Swagger uchun
+    @Operation(description = "Fayl ko'rilganligini yoki ko'rilmaganligini beradi (textni jirniy yoki oddiy qilish uchun)")
     public HttpEntity<?> setView(@PathVariable Long id) {
         ApiResult apiResult = attachmentService.setView(id);
         return ResponseEntity.status(apiResult.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResult);
@@ -138,6 +160,8 @@ public class AttachmentController {
 
     @RoleniTekshirish(role = "USER")
     @GetMapping("/setPDTV/{id}")
+    //Swagger uchun
+    @Operation(description = "Fayl kelgani to'g'risida tasdiq beradi")
     public HttpEntity<?> setPDTV(@PathVariable Long id, @CurrentUser Users users) {
         ApiResult apiResult = attachmentService.setPDTV(id, users);
         return ResponseEntity.status(apiResult.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResult);
@@ -151,6 +175,8 @@ public class AttachmentController {
 
     @RoleniTekshirish(role = "USER")
     @DeleteMapping("/deleteOneTo/{id}")
+    //Swagger uchun
+    @Operation(description = "Fayl o'chiradi)")
     public HttpEntity<?> deleteOneTo(@CurrentUser Users users, @PathVariable Long id) {
         ApiResult apiResult = attachmentService.deleteOneTo(users, id);
         return ResponseEntity.status(apiResult.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResult);
