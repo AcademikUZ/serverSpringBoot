@@ -1,5 +1,6 @@
 package fan.company.serverforotm.controller;
 
+import fan.company.serverforotm.annotation.RoleniTekshirish;
 import fan.company.serverforotm.entity.Users;
 import fan.company.serverforotm.payload.ApiResult;
 import fan.company.serverforotm.payload.RegisterDto;
@@ -43,7 +44,9 @@ public class UserController {
      */
 
 
-    @PreAuthorize(value = "hasAuthority('ADD_USER')")
+//    @PreAuthorize(value = "hasAuthority('ADD_USER')")   permission (huquq bo'yicha tekshirish)
+
+    @RoleniTekshirish(role = "ADMIN")
     @PostMapping("/addUser")
     public HttpEntity<?> register(@Valid @RequestBody RegisterDto dto) {
         ApiResult apiResult = service.register(dto);
@@ -72,7 +75,9 @@ public class UserController {
      *
      */
 
-    @PreAuthorize(value = "hasAuthority('EDIT_USER')")
+//    @PreAuthorize(value = "hasAuthority('EDIT_USER')")
+
+    @RoleniTekshirish(role = "ADMIN")
     @PutMapping("/{id}")
     public HttpEntity<?> editRole(@PathVariable Long id, @Valid @RequestBody RegisterDto dto) {
         ApiResult apiResult = service.edit(id, dto);
@@ -85,11 +90,13 @@ public class UserController {
      * @return  ApiResult orqali natija qaytadi true or false
      */
 
-    @PreAuthorize(value = "hasAuthority('VIEW_USER')")
+//    @PreAuthorize(value = "hasAuthority('VIEW_USER')")
+
+    @RoleniTekshirish(role = "ADMIN")
     @GetMapping
     public HttpEntity<?> getAll(@RequestParam Integer page) {
         Page<Users> all = service.getAll(page);
-        return ResponseEntity.status(!all.isEmpty() ? HttpStatus.OK : HttpStatus.CONFLICT).body(all);
+        return ResponseEntity.status(!all.isEmpty() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(all);
     }
 
     /**
@@ -98,7 +105,9 @@ public class UserController {
      * @return user qaytadi
      */
 
-    @PreAuthorize(value = "hasAuthority('VIEW_USER')")
+//    @PreAuthorize(value = "hasAuthority('VIEW_USER')")
+
+    @RoleniTekshirish(role = "ADMIN, USER")
     @GetMapping("/{id}")
     public HttpEntity<?> getOne(@PathVariable Long id) {
         Users one = service.getOne(id);
@@ -112,7 +121,8 @@ public class UserController {
      * @return ApiResult orqali natija qaytadi true or false
      */
 
-    @PreAuthorize(value = "hasAuthority('DELETE_USER')")
+//    @PreAuthorize(value = "hasAuthority('DELETE_USER')")
+    @RoleniTekshirish(role = "ADMIN")
     @DeleteMapping("/{id}")
     public HttpEntity<?> delete(@PathVariable Long id) {
         ApiResult apiResult = service.delete(id);
