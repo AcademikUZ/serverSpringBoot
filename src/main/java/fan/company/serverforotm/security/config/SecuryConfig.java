@@ -17,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -42,7 +43,7 @@ public class SecuryConfig extends WebSecurityConfigurerAdapter implements WebMvc
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); //filterni o'rnatish uchun kerak
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);  //har safar tokenni tekshirish
-
+        http.cors(); // Cors uchun kerak
     }
 
     /**
@@ -97,4 +98,18 @@ public class SecuryConfig extends WebSecurityConfigurerAdapter implements WebMvc
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
+
+    /**
+     * Cors sozlamalari
+     * @param registry
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedHeaders("*")
+                .allowedMethods("*")
+                .allowCredentials(true);
+    }
+
 }

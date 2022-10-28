@@ -54,8 +54,6 @@ public class Users extends AbstractEntity implements UserDetails {
         this.division = division;
     }
 
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
